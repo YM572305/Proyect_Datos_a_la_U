@@ -14,7 +14,8 @@ poligono_colombia = polyshape([S.X], [S.Y]);
 
 % Cargar los datos desde un archivo CSV
 disp('Cargando datos desde el archivo CSV...');
-df = readtable('C:\Users\monte\OneDrive\Desktop\Proyecto Alcaldía\JULIAN.csv'); % Cambia el nombre del archivo si es necesario
+%df = readtable('C:\Users\monte\OneDrive\Desktop\Proyecto Alcaldía\MATLAB\datosespaciales.csv'); % Cambia el nombre del archivo si es necesario
+df = readtable('C:\Users\monte\OneDrive\Desktop\Proyecto Alcaldía\R\datosespaciales.csv');
 %df = readtable('C:\Users\monte\OneDrive\Desktop\Proyecto Alcaldía\Delitos por Departamento\Colombia\COLOMBIA.csv');
 disp('Datos cargados correctamente.');
 

@@ -4,7 +4,9 @@
 %%%%%%%%%%%%%%
 
     %Carga el archivo CSV con los datos completos y los almacena en la variable datos
-datos = readtable("Delitos Colombia\Datos2010-2015.csv");
+ruta = 'C:\Users\monte\OneDrive\Desktop\Proyecto Alcaldía\Delitos Colombia\CAPTURAS';
+Nombre = 'Datos_Unidos.csv';
+datos = readtable(fullfile(ruta,Nombre));
 
     % Limpia los datos eliminando departamentos que no pertenecen al país
 datos = datos(~strcmpi(datos.DEPARTAMENTO, 'MADRID'), :);
@@ -29,6 +31,8 @@ copia = datos;
 
     % Eliminar la columna innecesaria 'CODIGO_DANE'
 copia.CODIGO_DANE = [];
+    % Nombres de 'MUNICIPIO' a Mayusculas
+copia.MUNICIPIO = upper(copia.MUNICIPIO);
     %Se corrigen errores en los nombres de algunos municipios
 copia = conver_name(copia); %se aplica la funcion conver_name
     %Secorrigen el nombre de algunos departamentos
@@ -62,18 +66,13 @@ for i = 1:length(DelFil)
     copia.DESCRIPCION_CONDUCTA_CAPTURA(strcmp(copia.DESCRIPCION_CONDUCTA_CAPTURA, DelFil{i})) = {'OTROS'};
 end
 
-%%
-
 %ALMACENAMIENTO DE LOS DEPARTAMENTOS EN CSVS SEPARADOS
 
     % Obtiene los nombres de los dapartamentos que hacen parte del conjunto de datos
 departamentos = unique(copia.DEPARTAMENTO);
 
-    % Crea una carpeta llamada 'Datos por Departamentos' de salida si no existe
-carpetaSalida = 'Datos por Departamentos';
-if ~exist(carpetaSalida, 'dir')
-    mkdir(carpetaSalida);
-end
+    %Carpeta de salida
+sal = 'C:\Users\monte\OneDrive\Desktop\Proyecto Alcaldía\Delitos por Departamento';
 
 % Crea un csv para cada DEPARTAMENTO 
 for i = 1:length(departamentos)
@@ -84,14 +83,11 @@ for i = 1:length(departamentos)
     nombreArchivo = [regexprep(depto, '[^\w]', '_'), '.csv'];
 
     % Ruta completa al archivo dentro de la carpeta
-    rutaCompleta = fullfile(carpetaSalida, nombreArchivo);
+    rutaCompleta = fullfile(sal, nombreArchivo);
 
     % Guardar CSV
     writetable(datosDepto, rutaCompleta);
 end
 
-    %guarda a BOGOTA en un CSV a parte
-writetable(bogota_datos, 'Datos por Departamentos\BOGOTA.csv');
-
     %guarada un CSV con los datos de COLOMBIA limpios
-writetable(copia, 'Delitos Colombia\Datos Limpios.csv');
+writetable(copia, 'C:\Users\monte\OneDrive\Desktop\Proyecto Alcaldía\Delitos Colombia\Datos Limpios.csv');

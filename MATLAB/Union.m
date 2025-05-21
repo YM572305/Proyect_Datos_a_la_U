@@ -1,8 +1,8 @@
 
     % CARGA DE LOS DATASETS QUE DESEA UNIR
-ruta = 'C:\Users\monte\OneDrive\Desktop\Proyecto Alcaldía\Delitos Colombia'; % Ruta de la carpeta en la cual se encuentran los datasets
-archivos = dir(fullfile(ruta, '*.csv'));                                     % Buscar todos los archivos tipo csv en la ruta
-datos = cell(length(archivos), 1);                                           % Celula vacia que va a contener los datos
+ruta = 'C:\Users\monte\OneDrive\Desktop\Proyecto Alcaldía\Delitos Colombia\CAPTURAS';  % Ruta de la carpeta en la cual se encuentran los datasets
+archivos = dir(fullfile(ruta, '*.csv'));                                               % Buscar todos los archivos tipo csv en la ruta
+datos = cell(length(archivos), 1);                                                     % Celula vacia que va a contener los datos
 
 for k = 1:length(archivos)                                                   % Lectura de cada file en la ruta
     nombre_Archivo = fullfile(ruta, archivos(k).name);                       % Lectura de la ruta de cada dataset de manera indicidual
@@ -19,4 +19,4 @@ end
 union = vertcat(datos{:});                                                   % Une las filas que se encuentren en la variable datos
 
     % ALMACENAMIENTO DE LOS DATOS
-writetable(union, 'C:\Users\monte\OneDrive\Desktop\Proyecto Alcaldía\Delitos Colombia\Datos Limpios\Datos Limpios');
+writetable(union, 'C:\Users\monte\OneDrive\Desktop\Proyecto Alcaldía\Delitos Colombia\CAPTURAS\Datos_Unidos.csv');

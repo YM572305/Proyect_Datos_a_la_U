@@ -1,0 +1,31 @@
+library(jsonlite)
+library(dplyr)
+library(readr)
+library(lubridate)
+
+# 1. Lectura del Dataset
+json <- "GeoColombia.json"
+data <- fromJSON(file.path('C:/Users/monte/OneDrive/Desktop/Proyecto Alcaldía/Delitos Colombia/DANE', json)) %>%
+  rename(DEPARTAMENTO = Departamento, MUNICIPIO = Localidad) %>%
+  select(-Tipo)
+
+# 2. Cargar el archivo CSV de datos limpios
+copia <- read_csv("C:/Users/monte/OneDrive/Desktop/Proyecto Alcaldía/Delitos Colombia/Datos Limpios/Datos Limpios.csv", locale = locale(encoding = "UTF-8"))
+
+# 3. Unir los datos geográficos con los de delitos
+union <- copia %>%
+  inner_join(data, by = c("DEPARTAMENTO", "MUNICIPIO")) %>%
+  filter(DESCRIPCION_CONDUCTA_CAPTURA == "ARTÍCULO 376. TRÁFICO. FABRICACIÓN O PORTE DE ESTUPEFACIENTES")
+
+# 4. Convertir a dateframe la columna FECHA_HECHO
+union$FECHA_HECHO <- as.Date(union$FECHA_HECHO, format = "%d/%m/%Y")
+
+# 5. Agrupar mensualmente y sumar los registros de cantidad
+union <- union %>%
+  mutate(MES = floor_date(FECHA_HECHO, unit = "month")) %>%
+  group_by(MES, LATITUD, LONGITUD) %>%
+  summarise(CANTIDAD = sum(CANTIDAD, na.rm = TRUE), .groups = "drop")
+
+# 6. Guardar la tabla como CSV
+write_csv(union, "datosespaciales.csv")
+
